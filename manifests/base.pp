@@ -11,6 +11,7 @@ class wls_plugins::base {
     'libaio.i686',
     'libaio-devel',
     'glibc-devel',
+    'compat-libcap1',
   ]
 
   package { $wls_packages:
