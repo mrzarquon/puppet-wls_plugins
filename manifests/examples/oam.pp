@@ -28,6 +28,12 @@ class wls_plugins::examples::oam (
     wls_java_installer   => '/tmp/webhosting/Weblogicfiles/jdk-7u72-linux-x64.tar.gz',
   }
 
+  file { '/usr/java/latest':
+    ensure  => link,
+    target  => $wls_java_home,
+    require => Wls_plugins::Java['jdk1.7.0_72'],
+  }
+
   file { '/opt/was/oracle/installers/silent_weblogic_install_oam.xml':
     ensure  => file,
     owner   => $wls_user,
