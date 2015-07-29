@@ -1,11 +1,19 @@
-class wls_plugins::examples::oam (
+class wls_plugins::examples::ovd (
   $wls_user = 'webadmin',
   $wls_group = 'webadmns',
   $wls_java = 'jdk1.7.0_72',
   $wls_java_dir = '/opt/product/java/',
-  $wls_middleware_home = '/opt/was/oracle/oam/middleware',
-  $wls_install_dir = "/opt/was/oracle/oam/middleware/wlserver_10.3",
-  $wls_oracle_idm_home = "/opt/was/oracle/oam/middleware/Oracle_IDM1",
+  $wls_middleware_home = '/opt/was/oracle/ovd/middleware',
+  $wls_install_dir = "/opt/was/oracle/ovd/middleware/wlserver_10.3",
+  $wls_oracle_idm_home = "/opt/was/oracle/ovd/middleware/Oracle_IDM1",
+  $wls_domain_hostname = $::fqdn,
+  $wls_domain_name = 'IDMDomain',
+  $wls_domain_user = 'weblogic',
+  $wls_domain_pass = 'weblogic01',
+  $wls_oracle_home = '/opt/was/oracle/ovd/middleware/Oracle_IDM',
+  $wls_instance_home = '/opt/was/oracle/ovd/middleware/OVD_Instance',
+  $wls_instance_name = 'OVD_Instance',
+  $wls_ovd_pass = 'weblogic01',
 ) {
 
   $wls_java_home = "${wls_java_dir}/${wls_java}"
@@ -41,36 +49,35 @@ class wls_plugins::examples::oam (
     require => Wls_plugins::Java['jdk1.7.0_72'],
   }
 
-  file { '/opt/was/oracle/installers/silent_weblogic_install_oam.xml':
+  file { '/opt/was/oracle/installers/silent_weblogic_install_ovd.xml':
     ensure  => file,
     owner   => $wls_user,
     group   => $wls_group,
     mode    => '0640',
-    content => template('wls_plugins/silent_weblogic_install_oam.erb'),
+    content => template('wls_plugins/silent_weblogic_install_ovd.erb'),
     require => File['/opt/was/oracle/installers'],
   }
   
-  wls_plugins::install { 'oam': 
+  wls_plugins::install { 'ovd': 
     wls_java          => 'jdk1.7.0_72',
     wls_java_dir      => '/opt/product/java/',
-    wls_plugin_dir    => '/opt/was/oracle/oam',
+    wls_plugin_dir    => '/opt/was/oracle/ovd',
     wls_installer     => '/opt/was/oracle/installers/wls1036_generic.jar',
     wls_installer_dir => '/opt/was/oracle/installers',
     wls_logs          => '/opt/was/oracle/installers/logs/weblogic_install_oam.log',
-    wls_answers       => '/opt/was/oracle/installers/silent_weblogic_install_oam.xml',
+    wls_answers       => '/opt/was/oracle/installers/silent_weblogic_install_ovd.xml',
     wls_user          => 'webadmin',
     wls_group         => 'webadmns',
-    require           => File['/opt/was/oracle/installers/silent_weblogic_install_oam.xml'],
+    require           => File['/opt/was/oracle/installers/silent_weblogic_install_ovd.xml'],
   }
 
-  wls_plugins::extract { 'idm':
-    wls_zip_1            => 'ofm_iam_generic_11.1.1.7.0_disk1_1of2.zip',
-    wls_zip_2            => 'ofm_iam_generic_11.1.1.7.0_disk1_2of2.zip',
+  wls_plugins::extract { 'ovd':
+    wls_zip_1            => 'ofm_idm_linux_11.1.1.7.0_64_disk1_1of1.zip',
     wls_installer_dir    => '/opt/was/oracle/installers',
     wls_installer_source => '/tmp/webhosting/Weblogicfiles',
     wls_user             => 'webadmin',
     wls_group            => 'webadmns',
-    require              => Wls_plugins::Install['oam'],
+    require              => Wls_plugins::Install['ovd'],
   }
 
   file { '/home/webadmin/oraInst.loc':
@@ -82,28 +89,30 @@ class wls_plugins::examples::oam (
 inst_group=webadmns',
   }
 
-  file { '/opt/was/oracle/installers/idm/idmsuite-resp-oam.txt':
+  file { '/opt/was/oracle/installers/ovd/ovd_silent_install.txt':
     ensure  => file,
     owner   => webadmin,
     group   => webadmns,
     mode    => '0640',
-    content => template('wls_plugins/idmsuite-resp-oam.erb'),
-    require => Wls_plugins::Extract['idm'],
+    content => template('wls_plugins/ovd_silent_install.erb'),
+    require => Wls_plugins::Extract['ovd'],
   }
 
-  exec { 'install IDM for OAM':
-    cwd         => '/opt/was/oracle/installers/idm/Disk1',
-    command     => "/opt/was/oracle/installers/idm/Disk1/runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/idm/idmsuite-resp-oam.txt -invPtrLoc /home/webadmin/oraInst.loc",
-    creates     => '/opt/was/oracle/oam/middleware/Oracle_IDM1/common/bin',
+  exec { 'install OVD for IDM':
+    cwd         => '/opt/was/oracle/installers/ovd/Disk1',
+    command     => "/opt/was/oracle/installers/ovd/Disk1/runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/ovd/ovd_silent_install.txt -invPtrLoc /home/webadmin/oraInst.loc",
+    creates     => '/opt/was/oracle/ovd/middleware/user_projects/domains/IDMDomain/servers/AdminServer/security',
     path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
     environment => [ "JAVA_HOME=${wls_java_home}", ],
     user        => $wls_user,
     group       => $wls_group,
     logoutput   => true,
     require     => [
-      Wls_plugins::Install['oam'],
-      Wls_plugins::Extract['idm'],
-      File['/opt/was/oracle/installers/idm/idmsuite-resp-oam.txt'],
+      Wls_plugins::Install['ovd'],
+      Wls_plugins::Extract['ovd'],
+      File['/opt/was/oracle/installers/ovd/ovd_silent_install.txt'],
     ],
   }
+
+
 }
