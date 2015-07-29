@@ -25,6 +25,7 @@ define wls_plugins::install(
     creates     => "${wls_plugin_dir}/middleware",
     environment => [ "JAVA_HOME=${wls_java_home}", ],
     path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
+    logoutput   => true,
     user        => $wls_user,
     group       => $wls_group,
   }
