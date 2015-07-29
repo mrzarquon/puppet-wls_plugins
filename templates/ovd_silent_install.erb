@@ -110,7 +110,7 @@ OVD_ADMIN_PASSWORD=<%= @wls_ovd_pass %>
 CONFIRM_OVD_ADMIN_PASSWORD=<%= @wls_ovd_pass %>
 
 #Provide the base, or the leftmost entry, of the virtual directory namespace that Oracle Virtual Directory will use to set its initial Access Control Lists (ACLs). For example, for the namespace dc=mycompany,dc=com, you would enter dc=com.
-OVD_LDAPv3_NAME_SPACE=dc=lfg,dc=com
+OVD_LDAPv3_NAME_SPACE=<%= @wls_ovd_ldap_namespace %>
 
 #Provide true to enable the HTTP Web Gateway to be protected by SSL. Oracle highly recommends that you use SSL/TLS for Oracle Virtual Directory's administrative gateway service. Disabling SSL/TLS  could result in your server administration traffic being monitored and even compromised.
 IS_ADMIN_SERVER_OF_OVD_IN_SECURE_MODE=true
@@ -125,7 +125,7 @@ IS_LDAP_CLIENT_LISTENER_FOR_OVD_SELECTED=false
 IS_HTTP_WEB_GATEWAY_OF_OVD_SELECTED=false
 
 #Specify a new Administrator User Name to connect to the Oracle Virtual Directory administrative service, For example, for the Administrator User Name you would enter cn=orcladmin.
-OVD_ADMIN=cn=orcladmin
+OVD_ADMIN=<%= @wls_ovd_ldap_admin %>
 
 
 [SYSTEM]

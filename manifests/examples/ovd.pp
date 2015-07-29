@@ -14,6 +14,8 @@ class wls_plugins::examples::ovd (
   $wls_instance_home = '/opt/was/oracle/ovd/middleware/OVD_Instance',
   $wls_instance_name = 'OVD_Instance',
   $wls_ovd_pass = 'weblogic01',
+  $wls_ovd_ldap_namespace = 'dc=lfg,dc=com',
+  $wls_ovd_ldap_admin = 'cn=orcladmin',
 ) {
 
   $wls_java_home = "${wls_java_dir}/${wls_java}"
