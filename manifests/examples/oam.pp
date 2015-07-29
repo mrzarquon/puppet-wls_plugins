@@ -4,8 +4,8 @@ class wls_plugins::examples::oam (
   $wls_java = 'jdk1.7.0_72',
   $wls_java_dir = '/opt/product/java/',
   $wls_middleware_home = '/opt/was/oracle/oam/middleware',
-  $wls_domain_dir = "${wls_middleware_home}/wlserver_10.3",
-  $wls_oracle_idm_home = "${wls_middleware_home}/Oracle_IDM1",
+  $wls_domain_dir = "/opt/was/oracle/oam/middleware/wlserver_10.3",
+  $wls_oracle_idm_home = "/opt/was/oracle/oam/middleware/Oracle_IDM1",
 ) {
 
   $wls_java_home = "${wls_java_dir}/${wls_java}"
@@ -28,6 +28,13 @@ class wls_plugins::examples::oam (
     wls_java_installer   => '/tmp/webhosting/Weblogicfiles/jdk-7u72-linux-x64.tar.gz',
   }
 
+  file { '/usr/java':
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0644',
+  }
+  
   file { '/usr/java/latest':
     ensure  => link,
     target  => $wls_java_home,
