@@ -20,14 +20,14 @@ define wls_plugins::install(
     group  => $wls_group,
   }
 
-  exec { "${wls_plugin}-plugin-install":
-    command     => "${wls_java_bin} -d64 -jar ${wls_installer} -mode=silent -silent_xml=${wls_answers} log=${wls_logs}",
-    creates     => "${wls_plugin_dir}/middleware",
-    environment => [ "JAVA_HOME=${wls_java_home}", ],
-    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
-    logoutput   => true,
-    user        => $wls_user,
-    group       => $wls_group,
-  }
+  #exec { "${wls_plugin}-plugin-install":
+  #  command     => "${wls_java_bin} -d64 -jar ${wls_installer} -mode=silent -silent_xml=${wls_answers} log=${wls_logs}",
+  #  creates     => "${wls_plugin_dir}/middleware",
+  #  environment => [ "JAVA_HOME=${wls_java_home}", ],
+  #  path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
+  #  logoutput   => true,
+  #  user        => $wls_user,
+  #  group       => $wls_group,
+  #}
 
 }
