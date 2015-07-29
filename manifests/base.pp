@@ -10,6 +10,8 @@ class wls_plugins::base {
     'libXtst.i686',
     'libaio.i686',
     'libaio-devel',
+    'libaio-devel.i686',
+    'glibc-devel.i686',
     'glibc-devel',
     'compat-libcap1',
   ]
