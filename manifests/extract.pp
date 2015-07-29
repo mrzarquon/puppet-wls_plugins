@@ -13,9 +13,9 @@ define wls_plugins::extract (
     group  => $wls_group,
   }
 
-  exec { "extract ${name} {$wls_zip_1}":
+  exec { "extract ${name} ${wls_zip_1}":
     cwd     => "/opt/was/oracle/installers/${name}",
-    command => "unzip {$wls_zip_1}",
+    command => "unzip ${wls_installer_source}/${wls_zip_1}",
     creates => "/opt/was/oracle/installers/${name}/Disk1",
     path    => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:',
     user    => $wls_user,
@@ -23,9 +23,9 @@ define wls_plugins::extract (
   }
 
   if $wls_zip_2 != undef {
-    exec { "extract ${name} {$wls_zip_2}":
+    exec { "extract ${name} ${wls_zip_2}":
       cwd     => "/opt/was/oracle/installers/${name}",
-      command => "unzip {$wls_zip_2}",
+      command => "unzip ${wls_installer_source}/${wls_zip_2}",
       creates => "/opt/was/oracle/installers/${name}/Disk3",
       path    => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:',
       user    => $wls_user,
