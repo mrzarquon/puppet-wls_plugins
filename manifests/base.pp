@@ -18,6 +18,7 @@ class wls_plugins::base {
   $wls_directories = [
     '/opt/was/',
     '/opt/was/oracle',
+    '/opt/was/oracle/installers',
   ]
 
   file { $wls_directories:
