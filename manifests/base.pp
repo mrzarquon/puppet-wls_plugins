@@ -9,10 +9,11 @@ class wls_plugins::base {
     'libXext.i686',
     'libXtst.i686',
     'libaio.i686',
+    'glibc-devel',
   ]
 
   package { $wls_packages:
-    ensure => present,
+    ensure => latest,
   }
 
   $wls_directories = [
