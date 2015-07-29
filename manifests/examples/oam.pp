@@ -4,12 +4,12 @@ class wls_plugins::examples::oam (
   $wls_java = 'jdk1.7.0_72',
   $wls_java_dir = '/opt/product/java/',
   $wls_middleware_home = '/opt/was/oracle/oam/middleware',
-  $wls_domain_dir = "{$wls_middleware_home}/wlserver_10.3",
-  $wls_oracle_idm_home = "{$wls_middleware_home}/Oracle_IDM1",
+  $wls_domain_dir = "${wls_middleware_home}/wlserver_10.3",
+  $wls_oracle_idm_home = "${wls_middleware_home}/Oracle_IDM1",
 ) {
 
-  $wls_java_home = "{$wls_java_dir}/${wls_java}"
-  $wls_java_bin = "{$wls_java_home}/bin/java"
+  $wls_java_home = "${wls_java_dir}/${wls_java}"
+  $wls_java_bin = "${wls_java_home}/bin/java"
 
   contain wls_plugins::base
 
@@ -70,9 +70,9 @@ class wls_plugins::examples::oam (
 
   exec { 'install IDM for OAM':
     cwd         => '/opt/was/oracle/installers/idm/Disk1',
-    command     => "./runInstaller -jreLoc {$wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/idm/idmsuite-resp-oam.txt -invPtrLoc /home/webadmin/oraInst.loc",
+    command     => "./runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/idm/idmsuite-resp-oam.txt -invPtrLoc /home/webadmin/oraInst.loc",
     creates     => '/opt/was/oracle/oam/middleware/Oracle_IDM1/common/bin',
-    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:{$wls_java_home}/bin",
+    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
     environment => [ "JAVA_HOME=${wls_java_home}", ],
     user        => $wls_user,
     group       => $wls_group,
