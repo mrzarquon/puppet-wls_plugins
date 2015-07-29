@@ -100,21 +100,21 @@ inst_group=webadmns',
     require => Wls_plugins::Extract['ovd'],
   }
 
-  exec { 'install OVD for IDM':
-    cwd         => '/opt/was/oracle/installers/ovd/Disk1',
-    command     => "/opt/was/oracle/installers/ovd/Disk1/runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/ovd/ovd_silent_install.txt -invPtrLoc /home/webadmin/oraInst.loc",
-    creates     => '/opt/was/oracle/ovd/middleware/user_projects/domains/IDMDomain/servers/AdminServer/security',
-    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
-    environment => [ "JAVA_HOME=${wls_java_home}", ],
-    user        => $wls_user,
-    group       => $wls_group,
-    logoutput   => true,
-    require     => [
-      Wls_plugins::Install['ovd'],
-      Wls_plugins::Extract['ovd'],
-      File['/opt/was/oracle/installers/ovd/ovd_silent_install.txt'],
-    ],
-  }
+  #exec { 'install OVD for IDM':
+  #  cwd         => '/opt/was/oracle/installers/ovd/Disk1',
+  #  command     => "/opt/was/oracle/installers/ovd/Disk1/runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/ovd/ovd_silent_install.txt -invPtrLoc /home/webadmin/oraInst.loc",
+  #  creates     => '/opt/was/oracle/ovd/middleware/user_projects/domains/IDMDomain/servers/AdminServer/security',
+  #  path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
+  #  environment => [ "JAVA_HOME=${wls_java_home}", ],
+  #  user        => $wls_user,
+  #  group       => $wls_group,
+  #  logoutput   => true,
+  #  require     => [
+  #    Wls_plugins::Install['ovd'],
+  #    Wls_plugins::Extract['ovd'],
+  #    File['/opt/was/oracle/installers/ovd/ovd_silent_install.txt'],
+  #  ],
+  #}
 
 
 }
