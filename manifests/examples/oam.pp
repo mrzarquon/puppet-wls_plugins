@@ -65,7 +65,7 @@ class wls_plugins::examples::oam (
     group   => webadmns,
     mode    => '0640',
     content => template('wls_plugins/idmsuite-resp-oam.erb'),
-    require => Wls_plugin::Extract['idm'],
+    require => Wls_plugins::Extract['idm'],
   }
 
   exec { 'install IDM for OAM':
