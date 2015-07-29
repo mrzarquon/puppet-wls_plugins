@@ -79,7 +79,7 @@ class wls_plugins::examples::oam (
     group   => 'webadmns',
     mode    => '0644',
     content => 'inventory_loc=/home/webadmin/oraInventory
-    inst_group=webadmns',
+inst_group=webadmns',
   }
 
   file { '/opt/was/oracle/installers/idm/idmsuite-resp-oam.txt':
