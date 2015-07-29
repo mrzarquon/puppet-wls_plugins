@@ -13,6 +13,15 @@ class wls_plugins::examples::oam (
 
   contain wls_plugins::base
 
+  # we aren't using a file resource because we don't want the mount
+  # to have to be present
+  exec { 'copy wls installer':
+    command => '/bin/cp /tmp/webhosting/Weblogicfiles/wls1036_generic.jar /opt/was/oracle/installers/wls1036_generic.jar',
+    creates => '/opt/was/oracle/installers/wls1036_generic.jar',
+    user    => 'webadmin',
+    require => File['/opt/was/oracle/installers/'],
+  }
+
   wls_plugins::java { 'jdk1.7.0_72': 
     wls_java_dir         => '/opt/product/java/',
     wls_java_installer   => '/tmp/webhosting/Weblogicfiles/jdk-7u72-linux-x64.tar.gz',
