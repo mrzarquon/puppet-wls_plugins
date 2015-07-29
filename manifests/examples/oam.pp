@@ -23,7 +23,7 @@ class wls_plugins::examples::oam (
     owner   => $wls_user,
     group   => $wls_group,
     mode    => '0640',
-    content => template('wls_plugins/silent_weblogic_install_oam.xml.erb'),
+    content => template('wls_plugins/silent_weblogic_install_oam.erb'),
     require => File['/opt/was/oracle/installers'],
   }
   
