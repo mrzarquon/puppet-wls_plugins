@@ -1,4 +1,4 @@
-define wls_plugin::extract (
+define wls_plugins::extract (
   $wls_zip_1 = undef,
   $wls_zip_2 = undef,
   $wls_installer_dir = '/opt/was/oracle/installers',

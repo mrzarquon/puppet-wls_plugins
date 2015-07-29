@@ -41,9 +41,13 @@ class wls_plugins::examples::oam (
   }
 
   wls_plugins::extract { 'idm':
-    wls_zip_1 => 'ofm_iam_generic_11.1.1.7.0_disk1_1of2.zip',
-    wls_zip_2 => 'ofm_iam_generic_11.1.1.7.0_disk1_2of2.zip',
-    require   => Wls_plugins::Install['oam'],
+    wls_zip_1            => 'ofm_iam_generic_11.1.1.7.0_disk1_1of2.zip',
+    wls_zip_2            => 'ofm_iam_generic_11.1.1.7.0_disk1_2of2.zip',
+    wls_installer_dir    => '/opt/was/oracle/installers',
+    wls_installer_source => '/tmp/webhosting/Weblogicfiles',
+    wls_user             => 'webadmin',
+    wls_group            => 'webadmns',
+    require              => Wls_plugins::Install['oam'],
   }
 
   file { '/home/webadmin/oraInst.loc':
