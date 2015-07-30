@@ -103,17 +103,18 @@ inst_group=webadmns',
   $wls_runinstaller_location = '/opt/was/oracle/installers/ovd/Disk1/runInstaller'
   $wls_runinstaller_answers = '/opt/was/oracle/installers/ovd/ovd_silent_install.txt'
   
-  #file { '/home/webadmin/installer.sh':
-  #  ensure  => file,
-  #  owner   => $wls_user,
-  #  mode    => '0644',
-  #  content => template('wls_plugins/install_runner.erb'),
-  #}
+  file { '/home/webadmin/installer.sh':
+    ensure  => file,
+    owner   => $wls_user,
+    mode    => '0644',
+    content => template('wls_plugins/install_runner.erb'),
+    before  => Exec['install OVD for IDM'],
+  }
 
 
   exec { 'install OVD for IDM':
     cwd         => '/opt/was/oracle/installers/ovd/Disk1',
-    command     => template('wls_plugins/install_runner.erb'),
+    command     => '/bin/bash /home/webadmin/installer.sh',
     creates     => '/opt/was/oracle/ovd/middleware/user_projects/domains/IDMDomain/servers/AdminServer/security',
     path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
     environment => [ "JAVA_HOME=${wls_java_home}", ],
