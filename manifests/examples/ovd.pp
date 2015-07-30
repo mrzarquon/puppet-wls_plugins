@@ -2,7 +2,7 @@ class wls_plugins::examples::ovd (
   $wls_user = 'webadmin',
   $wls_group = 'webadmns',
   $wls_java = 'jdk1.7.0_72',
-  $wls_java_dir = '/opt/product/java/',
+  $wls_java_dir = '/opt/product/java',
   $wls_middleware_home = '/opt/was/oracle/ovd/middleware',
   $wls_install_dir = "/opt/was/oracle/ovd/middleware/wlserver_10.3",
   $wls_oracle_idm_home = "/opt/was/oracle/ovd/middleware/Oracle_IDM1",
@@ -103,29 +103,29 @@ inst_group=webadmns',
   $wls_runinstaller_location = '/opt/was/oracle/installers/ovd/Disk1/runInstaller'
   $wls_runinstaller_answers = '/opt/was/oracle/installers/ovd/ovd_silent_install.txt'
   
-  file { '/home/webadmin/installer.sh':
-    ensure  => file,
-    owner   => $wls_user,
-    mode    => '0644',
-    content => template('wls_plugins/install_runner.erb'),
-  }
-
-
-  #exec { 'install OVD for IDM':
-  #  cwd         => '/opt/was/oracle/installers/ovd/Disk1',
-  #  command     => "/opt/was/oracle/installers/ovd/Disk1/runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/ovd/ovd_silent_install.txt -invPtrLoc /home/webadmin/oraInst.loc",
-  #  creates     => '/opt/was/oracle/ovd/middleware/user_projects/domains/IDMDomain/servers/AdminServer/security',
-  #  path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
-  #  environment => [ "JAVA_HOME=${wls_java_home}", ],
-  #  user        => $wls_user,
-  #  group       => $wls_group,
-  #  logoutput   => true,
-  #  require     => [
-  #    Wls_plugins::Install['ovd'],
-  #    Wls_plugins::Extract['ovd'],
-  #    File['/opt/was/oracle/installers/ovd/ovd_silent_install.txt'],
-  #  ],
+  #file { '/home/webadmin/installer.sh':
+  #  ensure  => file,
+  #  owner   => $wls_user,
+  #  mode    => '0644',
+  #  content => template('wls_plugins/install_runner.erb'),
   #}
+
+
+  exec { 'install OVD for IDM':
+    cwd         => '/opt/was/oracle/installers/ovd/Disk1',
+    command     => template('wls_plugins/install_runner.erb'),
+    creates     => '/opt/was/oracle/ovd/middleware/user_projects/domains/IDMDomain/servers/AdminServer/security',
+    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
+    environment => [ "JAVA_HOME=${wls_java_home}", ],
+    user        => $wls_user,
+    group       => $wls_group,
+    logoutput   => true,
+    require     => [
+      Wls_plugins::Install['ovd'],
+      Wls_plugins::Extract['ovd'],
+      File['/opt/was/oracle/installers/ovd/ovd_silent_install.txt'],
+    ],
+  }
 
 
 }

@@ -1,7 +1,7 @@
 define wls_plugins::install(
   $wls_plugin = $name,
   $wls_java = 'jdk1.7.0_72',
-  $wls_java_dir = '/opt/product/java/',
+  $wls_java_dir = '/opt/product/java',
   $wls_plugin_dir = "/opt/was/oracle/${wls_plugin}",
   $wls_installer = '/opt/was/oracle/installers/wls1036_generic.jar',
   $wls_installer_dir = '/opt/was/oracle/installers',
@@ -20,14 +20,14 @@ define wls_plugins::install(
     group  => $wls_group,
   }
 
-  #exec { "${wls_plugin}-plugin-install":
-  #  command     => "${wls_java_bin} -d64 -jar ${wls_installer} -mode=silent -silent_xml=${wls_answers} log=${wls_logs}",
-  #  creates     => "${wls_plugin_dir}/middleware",
-  #  environment => [ "JAVA_HOME=${wls_java_home}", ],
-  #  path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
-  #  logoutput   => true,
-  #  user        => $wls_user,
-  #  group       => $wls_group,
-  #}
+  exec { "${wls_plugin}-plugin-install":
+    command     => "${wls_java_bin} -d64 -jar ${wls_installer} -mode=silent -silent_xml=${wls_answers} log=/home/weblogic/install2.log",
+    creates     => "${wls_plugin_dir}/middleware",
+    environment => [ "JAVA_HOME=${wls_java_home}", ],
+    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
+    logoutput   => true,
+    user        => $wls_user,
+    group       => $wls_group,
+  }
 
 }
