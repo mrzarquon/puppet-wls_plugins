@@ -121,6 +121,7 @@ inst_group=webadmns',
     user        => $wls_user,
     group       => $wls_group,
     logoutput   => true,
+    timeout     => '0',
     require     => [
       Wls_plugins::Install['ovd'],
       Wls_plugins::Extract['ovd'],
