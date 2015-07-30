@@ -6,11 +6,12 @@ export JAVA_HOME=<%= @wls_java_home %>:
 
 RunInstaller=<%= @wls_runinstaller_location %>
 
-$RunInstaller -silent -ignoreSysPrereqs -response <%= @wls_runinstaller_answers %> -invPtrLoc /home/webadmin/oraInst.loc
+$RunInstaller -silent -ignoreSysPrereqs -response <%= @wls_runinstaller_answers %> -invPtrLoc <%= @wls_ptr_loc %>
 
 PID=`ps ax | grep -v grep | grep OraInstall | cut -d' ' -f1`
 
-while [ -d "/proc/${PID}" ]
+# this is ugly, but works - official bash motto
+while [ -d "/proc/${PID}" ] && [ -n "${PID}" ]
 do
 	echo "Oracle install is still running, PID: ${PID}"
 	sleep 20

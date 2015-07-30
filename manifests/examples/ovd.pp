@@ -16,6 +16,9 @@ class wls_plugins::examples::ovd (
   $wls_ovd_pass = 'weblogic01',
   $wls_ovd_ldap_namespace = 'dc=lfg,dc=com',
   $wls_ovd_ldap_admin = 'cn=orcladmin',
+  $wls_runinstaller_location = '/opt/was/oracle/installers/ovd/Disk1/runInstaller',
+  $wls_runinstaller_answers = '/opt/was/oracle/installers/ovd/ovd_silent_install.txt',
+  $wls_ptr_loc = '/home/webadmin/oraInst.loc',
 ) {
 
   $wls_java_home = "${wls_java_dir}/${wls_java}"
@@ -82,7 +85,7 @@ class wls_plugins::examples::ovd (
     require              => Wls_plugins::Install['ovd'],
   }
 
-  file { '/home/webadmin/oraInst.loc':
+  file { $wls_ptr_loc:
     ensure  => file,
     owner   => 'webadmin',
     group   => 'webadmns',
@@ -99,22 +102,19 @@ inst_group=webadmns',
     content => template('wls_plugins/ovd_silent_install.erb'),
     require => Wls_plugins::Extract['ovd'],
   }
-
-  $wls_runinstaller_location = '/opt/was/oracle/installers/ovd/Disk1/runInstaller'
-  $wls_runinstaller_answers = '/opt/was/oracle/installers/ovd/ovd_silent_install.txt'
   
-  file { '/home/webadmin/installer.sh':
+  file { '/home/webadmin/runinstaller_ovd.sh':
     ensure  => file,
     owner   => $wls_user,
     mode    => '0644',
-    content => template('wls_plugins/install_runner.erb'),
+    content => template('wls_plugins/runinstaller.erb'),
+    require => File[$wls_ptr_loc],
     before  => Exec['install OVD for IDM'],
   }
 
-
   exec { 'install OVD for IDM':
     cwd         => '/opt/was/oracle/installers/ovd/Disk1',
-    command     => '/bin/bash /home/webadmin/installer.sh',
+    command     => '/bin/bash /home/webadmin/runinstaller_ovd.sh',
     creates     => '/opt/was/oracle/ovd/middleware/user_projects/domains/IDMDomain/servers/AdminServer/security',
     path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
     environment => [ "JAVA_HOME=${wls_java_home}", ],
