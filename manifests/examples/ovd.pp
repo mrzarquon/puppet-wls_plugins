@@ -100,6 +100,17 @@ inst_group=webadmns',
     require => Wls_plugins::Extract['ovd'],
   }
 
+  $wls_runinstaller_location = '/opt/was/oracle/installers/ovd/Disk1/runInstaller'
+  $wls_runinstaller_answers = '/opt/was/oracle/installers/ovd/ovd_silent_install.txt'
+  
+  file { '/home/webadmin/installer.sh':
+    ensure  => file,
+    owner   => $wls_user,
+    mode    => '0644',
+    content => template('wls_plugins/install_runner.erb'),
+  }
+
+
   #exec { 'install OVD for IDM':
   #  cwd         => '/opt/was/oracle/installers/ovd/Disk1',
   #  command     => "/opt/was/oracle/installers/ovd/Disk1/runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/ovd/ovd_silent_install.txt -invPtrLoc /home/webadmin/oraInst.loc",
