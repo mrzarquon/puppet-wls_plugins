@@ -14,9 +14,12 @@ RunInstaller=<%= @wls_runinstaller_location %>
 
 $RunInstaller -jreLoc <%= @wls_java_home %> -silent -ignoreSysPrereqs -response <%= @wls_runinstaller_answers %> -invPtrLoc /home/webadmin/oraInst.loc
 
-while [`ps ax | grep -v grep | grep <%= @wls_user %> | grep OraInstall`]
+PID=`ps ax | grep -v grep | grep OraInstall | cut -d' ' -f1`
+
+while [ -d "/proc/${PID}" ]
 do
-	echo 'Oracle install is still running'
-	sleep 5
+	echo "Oracle install is still running, PID: ${PID}"
+	sleep 20
 done
 
+echo "Oracle install process has ended"
