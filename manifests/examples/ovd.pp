@@ -23,7 +23,7 @@ class wls_plugins::examples::ovd (
 
   $wls_java_home = "${wls_java_dir}/${wls_java}"
   $wls_java_bin = "${wls_java_home}/bin/java"
-
+  
   contain wls_plugins::base
 
   # we aren't using a file resource because we don't want the mount
@@ -129,5 +129,34 @@ inst_group=webadmns',
     ],
   }
 
+  exec { 'stop OVD adminserver':
+    command     => "${wls_middleware_home}/user_projects/domains/${wls_domain_name}/servers/AdminServer/bin/stopWeblogic.sh",
+    unless      => "test -f ${wls_middleware_home}/user_projects/domains/${wls_domain_name}/servers/AdminServer/security/boot.properties",
+    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
+    environment => [ "JAVA_HOME=${wls_java_home}", ],
+    user        => $wls_user,
+    group       => $wls_group,
+  }
+
+  file { "${wls_middleware_home}/user_projects/domains/${wls_domain_name}/servers/AdminServer/security/boot.properties":
+    ensure  => file,
+    owner   => $wls_user,
+    group   => $wls_group,
+    mode    => '0644',
+    content => "username=${wls_domain_user}
+password=${wls_domain_pass}",
+    replace => false,
+    require => Exec['stop OVD adminserver','install OVD for IDM'],
+    notify  => Exec['resart OVD adminserver'],
+  }
+  
+  exec { 'restart OVD adminserver':
+    command     => "nohup ${wls_middleware_home}/user_projects/domains/${wls_domain_name}/servers/AdminServer/bin/startWeblogic.sh &",
+    path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
+    environment => [ "JAVA_HOME=${wls_java_home}", ],
+    user        => $wls_user,
+    group       => $wls_group,
+    refreshonly => true,
+  }
 
 }
