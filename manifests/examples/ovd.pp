@@ -136,6 +136,7 @@ inst_group=webadmns',
     environment => [ "JAVA_HOME=${wls_java_home}", ],
     user        => $wls_user,
     group       => $wls_group,
+    require     => Exec['install OVD for IDM'],
   }
 
   file { "${wls_middleware_home}/user_projects/domains/${wls_domain_name}/servers/AdminServer/security/boot.properties":
