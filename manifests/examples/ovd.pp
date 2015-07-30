@@ -130,7 +130,7 @@ inst_group=webadmns',
   }
 
   exec { 'stop OVD adminserver':
-    command     => "${wls_middleware_home}/user_projects/domains/${wls_domain_name}/bin/stopWeblogic.sh",
+    command     => "${wls_middleware_home}/user_projects/domains/${wls_domain_name}/bin/stopWebLogic.sh",
     unless      => "test -f ${wls_middleware_home}/user_projects/domains/${wls_domain_name}/servers/AdminServer/security/boot.properties",
     path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
     environment => [ "JAVA_HOME=${wls_java_home}", ],
@@ -152,7 +152,7 @@ password=${wls_domain_pass}",
   }
   
   exec { 'restart OVD adminserver':
-    command     => "nohup ${wls_middleware_home}/user_projects/domains/${wls_domain_name}/startWeblogic.sh &",
+    command     => "nohup ${wls_middleware_home}/user_projects/domains/${wls_domain_name}/startWebLogic.sh &",
     path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${wls_java_home}/bin",
     environment => [ "JAVA_HOME=${wls_java_home}", ],
     user        => $wls_user,
