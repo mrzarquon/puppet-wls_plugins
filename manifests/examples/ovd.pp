@@ -147,7 +147,7 @@ inst_group=webadmns',
 password=${wls_domain_pass}",
     replace => false,
     require => Exec['stop OVD adminserver','install OVD for IDM'],
-    notify  => Exec['resart OVD adminserver'],
+    notify  => Exec['restart OVD adminserver'],
   }
   
   exec { 'restart OVD adminserver':
