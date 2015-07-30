@@ -10,7 +10,7 @@ $RunInstaller -silent -ignoreSysPrereqs -response <%= @wls_runinstaller_answers 
 
 sleep 30
 
-PID=`pgrep -f OraInstall`
+PID=`pgrep -o -f OraInstall`
 
 # this is ugly, but works - official bash motto
 while [ -d "/proc/${PID}" ] && [ -n "${PID}" ]
