@@ -1,14 +1,8 @@
-#!/bin/bash
-
-# ugly script that will wait for all the forked install subtasks to finish
-
 PATH=$PATH:<%= @wls_java_home %>/bin:
 
 export PATH
 
 export JAVA_HOME=<%= @wls_java_home %>:
-
-#"/opt/was/oracle/installers/ovd/Disk1/runInstaller -jreLoc ${wls_java_home} -silent -ignoreSysPrereqs -response /opt/was/oracle/installers/ovd/ovd_silent_install.txt -invPtrLoc /home/webadmin/oraInst.loc"
 
 RunInstaller=<%= @wls_runinstaller_location %>
 
